@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <!-- optimize for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- materialize -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <!-- custom css -->
+  <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+  <title>Mongo Scraper</title>
+</head>
+<body>
+  <!-- navbar -->
+  <header>
+    <nav>
+      <div class="nav-wrapper blue-grey darken-1">
+      <a href="/" class="brand-logo">Mongo Scraper</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/">Home</a></li>
+        <li><a href="/saved">Saved Articles</a></li>
+        <li><a class="">Scrape new articles!</a></li>
+      </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- content will come from other views -->
+  <main>
+    {{{ body }}}
+  </main>
+
+  <!-- footer -->
+  <footer class="page-footer blue-grey darken-1">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <p class="grey-text text-lighten-4">NHL.com Mongo Scraper</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="https://github.com/paulz92/News-Scraper" target="_blank">Github</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      © 2018 Paul Zavattieri
+      </div>
+    </div>
+  </footer>
+
+  <!-- link jquery, materialize js, custom js -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>
