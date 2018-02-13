@@ -11,14 +11,20 @@ var ArticleSchema = new Schema({
     type: String,
     required: true
   },
+  // `summary` is required and of type String
+  summary: {
+    type: String,
+    required: true
+  },
   // `link` is required and of type String
   link: {
     type: String,
     required: true
   },
-  summary: {
-    type: String,
-    required: true
+  // link to comment model/table by using the ref and saving an obj id with it
+  comment: {
+    type: Schema.Types.ObjectId,
+    ref: "Comment"
   }
 });
 
