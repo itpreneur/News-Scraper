@@ -9,7 +9,16 @@ main {
   flex: 1 0 auto;
 }
 
+.brand-logo {
+  margin-left: 15px;
+}
+
 header, main, footer {
   margin: 0px;
   padding: 0px;
 }
+
+div.col.s6.card-links {
+  padding: 0px;
+}
+

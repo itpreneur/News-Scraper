@@ -21,6 +21,17 @@ var ArticleSchema = new Schema({
     type: String,
     required: true
   },
+  // image link
+  image: {
+    type: String,
+    required: true
+  },
+  // defines whether or not article is saved
+  saved: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   // link to comment model/table by using the ref and saving an obj id with it
   comment: {
     type: Schema.Types.ObjectId,

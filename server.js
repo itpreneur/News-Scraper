@@ -35,45 +35,80 @@ mongoose.connect(MONGODB_URI, {
 });
 
 // Routes
-// A GET route for scraping nhl.com/news
-app.get("/scrape", function(req, res) {
-  // remove currently existing articles so no repeats
-  db.Article.remove({}, function(err) {
-    if (err) throw err;
+// home page, find all articles and render landing handlebars
+app.get("/", function(req, res) {
+  db.Article.find({}, function(error, data) {
+    if (error) throw error;
+    res.render("landing", { articleData: data })
   });
-  // grab html body
-  request("https://www.nhl.com/news", function(error, response, html) {
-    // load html into cheerio
-    var $ = cheerio.load(html);
+});
 
-    // grab every article and do the following:
-    $("article").each(function(i, element) {
-      // Save a result object
-      var result = {};
+// saved page, find all articles and render saved handlebars
+app.get("/saved", function(req, res) {
+  db.Article.find({}, function(error, data) {
+    if (error) throw error;
+    res.render("saved", { articleData: data })
+  });
+});
 
-      // save title, summary, url as properties of the result object
-      result.title = $(element)
-        .data("title");
-      result.summary = $(element)
-        .find("h2")
-        .text();
-      result.link = $(element)
-        .data("url");
+// route for scraping nhl.com/news
+app.get("/scrape", function(req, res) {
+  // find all articles already in db
+  db.Article.find({}, function(err, currentArticles) {
+    if (err) throw err;
+    // create and populate an array with all current db article titles
+    var currentArticleTitles = [];
+    for (var i = 0; i < currentArticles.length; i++) {
+      currentArticleTitles.push(currentArticles[i].title);
+    }
 
-      //Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          // View the added result in the console
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          // If an error occurred, send it to the client
-          return res.json(err);
-        });
+    // then grab html body
+    request("https://www.nhl.com/news", function(error, response, html) {
+      // load html into cheerio
+      var $ = cheerio.load(html);
+      // grab every article from html and do the following:
+      $("article").each(function(i, element) {
+        // Save a result object
+        var result = {};
+        // if the nhl.com article doesn't already exist in the database, then...
+        if (currentArticleTitles.indexOf($(element).data("title")) === -1) {
+          // save title, summary, url as properties of the result object
+          result.title = $(element)
+            .data("title");
+          result.summary = $(element)
+            .find("h2")
+            .text();
+          result.link = $(element)
+            .data("url");
+          // save image property of result object, based on nhl.com's code, the image is either a src="..." or data-src="...", so building in function to check and fill
+          // in with default if neither
+          result.image = "";
+            
+          if ($(element).find("img").data("src")) {
+            result.image = $(element).find("img").data("src");
+          } 
+          else if ($(element).find("img").attr("src")) {
+            result.image = $(element).find("img").attr("src");
+          }
+          else {
+            result.image = '/assets/images/default.png';
+          }
+
+          // Create a new Article using the `result` object built from scraping
+          db.Article.create(result)
+            .then(function(dbArticle) {
+              // View the added result in the console
+              console.log(dbArticle);
+            })
+            .catch(function(err) {
+              // If an error occurred, send it to the client
+              return res.json(err);
+            });
+        }
+      });
+      // If we were able to successfully scrape and save articles, redirect home
+      res.redirect("/");
     });
-
-    // If we were able to successfully scrape and save an Article, send a message to the client
-    res.send("Scrape Complete");
   });
 });
 
