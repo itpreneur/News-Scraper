@@ -6,21 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- materialize -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- custom css -->
   <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
-  <title>Mongo Scraper</title>
+  <title>NHL News Scraper</title>
 </head>
 <body>
   <!-- navbar -->
   <header>
     <nav>
       <div class="nav-wrapper blue-grey darken-1">
-      <a href="/" class="brand-logo">Mongo Scraper</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/">Home</a></li>
-        <li><a href="/saved">Saved Articles</a></li>
-        <li><a class="">Scrape new articles!</a></li>
-      </ul>
+        <a href="/" class="brand-logo">NHL News Scraper</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="/">Home</a></li>
+          <li><a href="/saved">Saved Articles</a></li>
+          <li><a href="/scrape">Scrape new articles!</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+          <li><a href="/">Home</a></li>
+          <li><a href="/saved">Saved Articles</a></li>
+          <li><a href="/scrape">Scrape new articles!</a></li>
+        </ul>
       </div>
     </nav>
   </header>
@@ -32,21 +39,16 @@
 
   <!-- footer -->
   <footer class="page-footer blue-grey darken-1">
-    <div class="container">
+    <div class="container center-align">
       <div class="row">
         <div class="col l6 s12">
-          <p class="grey-text text-lighten-4">NHL.com Mongo Scraper</p>
+          <p class="grey-text text-lighten-4">© 2018 Paul Zavattieri</p>
         </div>
         <div class="col l4 offset-l2 s12">
           <ul>
             <li><a class="grey-text text-lighten-3" href="https://github.com/paulz92/News-Scraper" target="_blank">Github</a></li>
           </ul>
         </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      © 2018 Paul Zavattieri
       </div>
     </div>
   </footer>
