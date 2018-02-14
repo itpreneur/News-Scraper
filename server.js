@@ -43,9 +43,9 @@ app.get("/", function(req, res) {
   });
 });
 
-// saved page, find all articles and render saved handlebars in order of newest first
+// saved page, find all articles where saved is true and render saved handlebars in order of newest first
 app.get("/saved", function(req, res) {
-  db.Article.find({}, null, {sort: {'_id': -1}}, function(error, data) {
+  db.Article.find({saved: true}, null, {sort: {'_id': -1}}, function(error, data) {
     if (error) throw error;
     res.render("saved", { articleData: data })
   });
@@ -154,6 +154,14 @@ app.get("/articles/:id", function(req, res) {
     .catch(function(err) {
       res.json(err);
     });
+});
+
+app.delete("/comments/:id", function(req, res) {
+  db.Comment.remove({ _id: req.params.id }, function(err, data) {
+    if (err) throw err;
+    console.log(data);
+    res.sendStatus(200);
+  })
 });
 
 // Start the server

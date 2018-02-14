@@ -47,6 +47,7 @@
                 <div class="comment-display-root">
                 </div>
                 <textarea id="comment-input" class="materialize-textarea"></textarea>
+                <label class="active" for="comment-input">Add new comment</label>
               </div>
               <div class="modal-footer">
                 <button data-dbId="" class="modal-action modal-close waves-effect waves-green btn save-comment-button">Save Comment</button>
@@ -62,5 +63,10 @@
     </div>
   </div>
   {{/if}}
+  {{#unless this.saved}}
+    <div>
+      <p>nothing here bro</p>
+    </div>
+  {{/unless}}
   {{/each}}
 </div>
