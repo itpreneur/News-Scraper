@@ -37,7 +37,7 @@ mongoose.connect(MONGODB_URI, {
 // Routes
 // home page, find all articles and render landing handlebars in order of newest first
 app.get("/", function(req, res) {
-  db.Article.find({}, null, {sort: {'_id': -1}}, function(error, data) {
+  db.Article.find({}, null, { sort: {'_id': -1} }, function(error, data) {
     if (error) throw error;
     res.render("landing", { articleData: data })
   });
@@ -45,7 +45,7 @@ app.get("/", function(req, res) {
 
 // saved page, find all articles where saved is true and render saved handlebars in order of newest first
 app.get("/saved", function(req, res) {
-  db.Article.find({saved: true}, null, {sort: {'_id': -1}}, function(error, data) {
+  db.Article.find({ saved: true }, null, { sort: {'_id': -1} }, function(error, data) {
     if (error) throw error;
     res.render("saved", { articleData: data })
   });
@@ -75,7 +75,6 @@ app.get("/scrape", function(req, res) {
           result.link = $(element)
             .data("url");
           result.image = "";
-          
           // nhl.com is inconsistent in how it saves images, hence multiple options to populate result.image
           if ($(element).find("img").data("src")) {
             result.image = $(element).find("img").data("src");
@@ -86,7 +85,6 @@ app.get("/scrape", function(req, res) {
           else {
             result.image = '/assets/images/default.png';
           }
-
           // Create a new Article using the `result` object, log it, catch any errors
           db.Article.create(result)
             .then(function(dbArticle) {
@@ -131,18 +129,6 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
-// Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
-  // Grab every document in the Articles collection, send json if sucessful, send error if not
-  db.Article.find({})
-    .then(function(dbArticle) {
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
-
 // Route for grabbing a specific Article by id
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, find it, populate it with its comments, send back json if successful/error if not
@@ -156,6 +142,7 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
+// delete route for comment removal
 app.delete("/comments/:id", function(req, res) {
   db.Comment.remove({ _id: req.params.id }, function(err, data) {
     if (err) throw err;
