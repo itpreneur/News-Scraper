@@ -38,7 +38,20 @@
           </div>
           {{!-- link to comments goes here --}}
           <div class="col s4 card-links">
-            <button data-dbId="{{this._id}}" class="btn">Comments</button>
+            {{!-- modal trigger button --}}
+            <button class="waves-effect waves-light btn modal-trigger view-comments-button" data-target="comment-modal" data-dbId="{{this._id}}">Comments</button>
+            {{!-- modal content --}}
+            <div id="comment-modal" class="modal">
+              <div class="modal-content">
+                <h4 class="modal-title"></h4>
+                <div class="comment-display-root">
+                </div>
+                <textarea id="comment-input" class="materialize-textarea"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button data-dbId="" class="modal-action modal-close waves-effect waves-green btn save-comment-button">Save Comment</button>
+              </div>
+            </div>
           </div>
           {{!-- delete button --}}
           <div class="col s4 card-links">

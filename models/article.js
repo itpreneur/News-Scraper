@@ -32,11 +32,14 @@ var ArticleSchema = new Schema({
     default: false,
     required: true
   },
-  // link to comment model/table by using the ref and saving an obj id with it
-  comment: {
-    type: Schema.Types.ObjectId,
-    ref: "Comment"
-  }
+  // link to comment model/table by using the ref and saving an obj id with it. it's an array of objects so that we can have many comments
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ]
+
 });
 
 // This creates our model from the above schema, using mongoose's model method
