@@ -103,7 +103,7 @@ app.get("/scrape", function(req, res) {
   });
 });
 
-// route for updating articles in db
+// route for updating articles in db for saved/unsaved
 app.put("/articles/:id", function(req, res) {
   // update at req.params.id, update with req.body from app.js, throw err if err, if not - log the result, send back 200 if successful
   db.Article.update({ _id: req.params.id }, { $set: req.body }, function(err, result) {
@@ -111,6 +111,24 @@ app.put("/articles/:id", function(req, res) {
     console.log(result);
     res.sendStatus(200);
   });
+});
+
+// Route for saving an Article's associated comment
+app.post("/articles/:id", function(req, res) {
+  // Create a new comment and pass the req.body to the entry
+  db.Comment.create(req.body)
+    .then(function(dbComment) {
+      // if comment creation success, find article with req.params.id match, associate it with the comment body sent from app.js by pushing it to comments array
+      // new true returns updated article
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { comments: dbComment._id } }, { new: true });
+    })
+    .then(function(dbArticle) {
+      // we were able to successfully update an Article, send it back, otherwise send the error
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
 });
 
 // Route for getting all Articles from the db
@@ -129,7 +147,7 @@ app.get("/articles", function(req, res) {
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, find it, populate it with its comments, send back json if successful/error if not
   db.Article.findOne({ _id: req.params.id })
-    .populate("comment")
+    .populate("comments")
     .then(function(dbArticle) {
       res.json(dbArticle);
     })
@@ -137,26 +155,6 @@ app.get("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
-
-// // Route for saving/updating an Article's associated comment
-// app.post("/articles/:id", function(req, res) {
-//   // Create a new comment and pass the req.body to the entry
-//   db.comment.create(req.body)
-//     .then(function(dbcomment) {
-//       // If a comment was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new comment
-//       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-//       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-//       return db.Article.findOneAndUpdate({ _id: req.params.id }, { comment: dbcomment._id }, { new: true });
-//     })
-//     .then(function(dbArticle) {
-//       // If we were able to successfully update an Article, send it back to the client
-//       res.json(dbArticle);
-//     })
-//     .catch(function(err) {
-//       // If an error occurred, send it to the client
-//       res.json(err);
-//     });
-// });
 
 // Start the server
 app.listen(PORT, function() {
