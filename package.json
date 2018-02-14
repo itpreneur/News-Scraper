@@ -2,10 +2,9 @@
   "name": "news-scraping-app",
   "version": "1.0.0",
   "description": "a web app that lets users view and leave comments on the latest news articles by utilizing Cheerio to scrape news and Mongoose for database management",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
