@@ -39,7 +39,7 @@
           {{!-- link to comments goes here --}}
           <div class="col s4 card-links">
             {{!-- modal trigger button --}}
-            <button class="waves-effect waves-light btn modal-trigger view-comments-button" data-target="comment-modal" data-dbId="{{this._id}}">Comments</button>
+            <button class="waves-effect waves-light btn modal-trigger view-comments-button" data-target="comment-modal" data-dbid="{{this._id}}">Comments</button>
             {{!-- modal content --}}
             <div id="comment-modal" class="modal">
               <div class="modal-content">
@@ -50,14 +50,14 @@
                 <label class="active" for="comment-input">Add new comment</label>
               </div>
               <div class="modal-footer">
-                <button data-dbId="" class="modal-action modal-close waves-effect waves-green btn save-comment-button">Save Comment</button>
+                <button data-dbid="" class="modal-action modal-close waves-effect waves-green btn save-comment-button">Save Comment</button>
                 <button class="modal-action modal-close waves-effect waves-green btn">Close</button>
               </div>
             </div>
           </div>
           {{!-- delete button --}}
           <div class="col s4 card-links">
-            <button data-dbId="{{this._id}}" class="btn delete-from-saved-button">Delete From Saved</button>
+            <button data-dbid="{{this._id}}" class="btn delete-from-saved-button">Delete From Saved</button>
           </div>
         </div>
       </div>

@@ -50,7 +50,7 @@ $(document).ready(function(){
       console.log(data);
       $('.modal-title').html(data.title);
       $('.comment-display-root').empty();
-      $('.save-comment-button').data('dbId', data._id);
+      $('.save-comment-button').data('dbid', data._id);
       if (data.comments.length === 0) {
         $('.comment-display-root').html("No comments yet. Be the first to comment!");
       } else {
@@ -66,7 +66,7 @@ $(document).ready(function(){
 
   // when save comment is clicked, add comment to db
   $('.save-comment-button').on('click', function() {
-    var dbId = $(this).data('dbId');
+    var dbId = $(this).data('dbid');
     // grab id from data attr, use ajax post method to send comment from text-input val to the article
     $.ajax({
       method: "POST",
@@ -83,10 +83,10 @@ $(document).ready(function(){
 
   // when delete comment button is clicked, remove the button
   $(document).on('click', '.delete-comment-button', function() {
-    var dbid = $(this).data('dbid');
+    var dbId = $(this).data('dbid');
     $.ajax({
       method: "DELETE",
-      url: "comments/" + dbid
+      url: "comments/" + dbId
     }).done(function(data) {
       console.log(data);
       location.reload();
