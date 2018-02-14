@@ -22,3 +22,16 @@ div.col.s6.card-links {
   padding: 0px;
 }
 
+.parallax-container {
+  margin-bottom: 30px;
+  height: 80%;
+}
+
+.header.center {
+  background-color: white;
+}
+
+.intro-text {
+  color: white;
+  text-shadow: -1.5px 0 #546e7a, 0 1.5px #546e7a, 1.5px 0 #546e7a, 0 -1.5px #546e7a;
+}
