@@ -1,11 +1,10 @@
-$( document ).ready(function(){
+$(document).ready(function(){
   // materialize nav bar collapse functionality
   $('.button-collapse').sideNav();
 
   // materialize modal functionality
   $('.modal').modal();
 
-  // when save article button is clicked
   $('.save-article-button').on('click', function() {
     // grab _id from saved data attribute
     var dbId = $(this).data('dbid');
@@ -20,7 +19,7 @@ $( document ).ready(function(){
       console.log(data);
     });
     // update button html to article saved
-    $(this).html("Article saved.");
+    $(this).html("Article saved");
   });
   
   // when delete from saved is clicked, update db to change saved to false
@@ -78,6 +77,7 @@ $( document ).ready(function(){
       // then log it and empty the input box
     }).done(function(data) {
       console.log(data);
+      $(this).html("Comment Saved")
     })
   });
 
