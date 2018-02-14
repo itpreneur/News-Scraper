@@ -35,17 +35,17 @@ mongoose.connect(MONGODB_URI, {
 });
 
 // Routes
-// home page, find all articles and render landing handlebars
+// home page, find all articles and render landing handlebars in order of newest first
 app.get("/", function(req, res) {
-  db.Article.find({}, function(error, data) {
+  db.Article.find({}, null, {sort: {'_id': -1}}, function(error, data) {
     if (error) throw error;
     res.render("landing", { articleData: data })
   });
 });
 
-// saved page, find all articles and render saved handlebars
+// saved page, find all articles and render saved handlebars in order of newest first
 app.get("/saved", function(req, res) {
-  db.Article.find({}, function(error, data) {
+  db.Article.find({}, null, {sort: {'_id': -1}}, function(error, data) {
     if (error) throw error;
     res.render("saved", { articleData: data })
   });
@@ -53,26 +53,20 @@ app.get("/saved", function(req, res) {
 
 // route for scraping nhl.com/news
 app.get("/scrape", function(req, res) {
-  // find all articles already in db
+  // find all articles already in db, save titles in array
   db.Article.find({}, function(err, currentArticles) {
     if (err) throw err;
-    // create and populate an array with all current db article titles
     var currentArticleTitles = [];
     for (var i = 0; i < currentArticles.length; i++) {
       currentArticleTitles.push(currentArticles[i].title);
     }
-
-    // then grab html body
+    // then grab html body, load into cheerio
     request("https://www.nhl.com/news", function(error, response, html) {
-      // load html into cheerio
       var $ = cheerio.load(html);
-      // grab every article from html and do the following:
+      // grab every article from html, save title/summary/link/image in a result object if the title doesn't already appear in db
       $("article").each(function(i, element) {
-        // Save a result object
         var result = {};
-        // if the nhl.com article doesn't already exist in the database, then...
         if (currentArticleTitles.indexOf($(element).data("title")) === -1) {
-          // save title, summary, url as properties of the result object
           result.title = $(element)
             .data("title");
           result.summary = $(element)
@@ -80,10 +74,9 @@ app.get("/scrape", function(req, res) {
             .text();
           result.link = $(element)
             .data("url");
-          // save image property of result object, based on nhl.com's code, the image is either a src="..." or data-src="...", so building in function to check and fill
-          // in with default if neither
           result.image = "";
-            
+          
+          // nhl.com is inconsistent in how it saves images, hence multiple options to populate result.image
           if ($(element).find("img").data("src")) {
             result.image = $(element).find("img").data("src");
           } 
@@ -94,14 +87,12 @@ app.get("/scrape", function(req, res) {
             result.image = '/assets/images/default.png';
           }
 
-          // Create a new Article using the `result` object built from scraping
+          // Create a new Article using the `result` object, log it, catch any errors
           db.Article.create(result)
             .then(function(dbArticle) {
-              // View the added result in the console
               console.log(dbArticle);
             })
             .catch(function(err) {
-              // If an error occurred, send it to the client
               return res.json(err);
             });
         }
@@ -112,32 +103,37 @@ app.get("/scrape", function(req, res) {
   });
 });
 
+// route for updating articles in db
+app.put("/articles/:id", function(req, res) {
+  // update at req.params.id, update with req.body from app.js, throw err if err, if not - log the result, send back 200 if successful
+  db.Article.update({ _id: req.params.id }, { $set: req.body }, function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.sendStatus(200);
+  });
+});
+
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
-  // Grab every document in the Articles collection
+  // Grab every document in the Articles collection, send json if sucessful, send error if not
   db.Article.find({})
     .then(function(dbArticle) {
-      // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
       res.json(err);
     });
 });
 
-// Route for grabbing a specific Article by id, populate it with it's comment
+// Route for grabbing a specific Article by id
 app.get("/articles/:id", function(req, res) {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  // Using the id passed in the id parameter, find it, populate it with its comments, send back json if successful/error if not
   db.Article.findOne({ _id: req.params.id })
-    // ..and populate all of the comments associated with it
     .populate("comment")
     .then(function(dbArticle) {
-      // If we were able to successfully find an Article with the given id, send it back to the client
       res.json(dbArticle);
     })
     .catch(function(err) {
-      // If an error occurred, send it to the client
       res.json(err);
     });
 });

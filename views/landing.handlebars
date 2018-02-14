@@ -1,9 +1,11 @@
 <div class="parallax-container">
   <div class="section no-pad-bot">
-    <br>
-    <br>
-    <h1 class="header center">Mongo Scraper</h1>
-    <h2 class="header center">NHL News Edition</h2>
+    <div class="row center">
+      <div class="col s8 offset-s2 intro-text">
+        <h1>Mongo Scraper</h1>
+        <h2>NHL News Edition</h2>
+      </div>
+    </div>
   </div>
   <div class="parallax">
     <img src="/assets/images/background.jpg" alt="hockey rink" style="display: block;">
@@ -32,10 +34,10 @@
         <div class="card-action valign-wrapper center-align blue-grey darken-1">
           {{!-- link to article goes here --}}
           <div class="col s6 card-links">
-            <a href="https://www.nhl.com{{this.link}}" target="_blank">View Article</a>
+            <a href="https://www.nhl.com{{this.link}}" class="white-text" style="margin: 0px;" target="_blank"><button class="btn">View Article</button></a>
           </div>
-          <div class="col s6 card-links">
-            <a href="#" class="save-article-button">Save Article</a>
+          <div class="col s6 card-links save-article-div">
+            <button data-dbId="{{this._id}}" class="btn save-article-button">Save Article</button>
           </div>
         </div>
       </div>
