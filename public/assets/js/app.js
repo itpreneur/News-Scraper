@@ -41,6 +41,7 @@ $( document ).ready(function(){
   // when view comments is clicked, pull in comments from db with ajax get req to articles/_id
   $('.view-comments-button').on('click', function() {
     var dbId = $(this).data('dbid');
+    $("#comment-input").val('');
     $.ajax({
       method: "GET",
       url: "/articles/" + dbId
@@ -57,7 +58,7 @@ $( document ).ready(function(){
         for (var i = 0; i < data.comments.length; i++) {
           var newCard = 
             "<div class='card blue-grey darken-1'><div class='card-content white-text valign-wrapper'><p class='col s11 left-align'>" 
-            + data.comments[i].body + "</p><button class='col s1 btn delete-comment-button'>X</button></div></div>";
+            + data.comments[i].body + "</p><button class='col s1 btn delete-comment-button' data-dbid='" + data.comments[i]._id + "'>X</button></div></div>";
           $('.comment-display-root').prepend(newCard);
         }
       }
@@ -67,7 +68,6 @@ $( document ).ready(function(){
   // when save comment is clicked, add comment to db
   $('.save-comment-button').on('click', function() {
     var dbId = $(this).data('dbId');
-    $("#comment-input").empty();
     // grab id from data attr, use ajax post method to send comment from text-input val to the article
     $.ajax({
       method: "POST",
@@ -78,6 +78,18 @@ $( document ).ready(function(){
       // then log it and empty the input box
     }).done(function(data) {
       console.log(data);
+    })
+  });
+
+  // when delete comment button is clicked, remove the button
+  $(document).on('click', '.delete-comment-button', function() {
+    var dbid = $(this).data('dbid');
+    $.ajax({
+      method: "DELETE",
+      url: "comments/" + dbid
+    }).done(function(data) {
+      console.log(data);
+      location.reload();
     })
   });
 });
